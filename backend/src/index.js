@@ -1,9 +1,14 @@
 const express = require('express'); // chamando a biblioteca express para cuidar das rotas
 const mongoose = require('mongoose');
 const cors = require('cors');
-const routes = require('./routes')
+const http =  require('http');
+const routes = require('./routes');
+const { setupWebsocket } = require('./websocket')
 
 const app = express(); // aqui instancio o app para pegar a fução do express()
+const server = http.Server(app); // servidor http fora do express
+
+setupWebsocket(server);
 
 mongoose.connect('mongodb+srv://linikerj:linikercurso@cluster0-hnpqz.mongodb.net/week10?retryWrites=true&w=majority',{
     useNewUrlParser: true,
@@ -14,7 +19,7 @@ app.use(cors())
 app.use(express.json()); // .use() para todas configuraçõs
 app.use(routes)
 
-app.listen(3333);
+server.listen(3333);
 
 //  Métodos HTTP: GET, POST, PUT, DELETE
 
